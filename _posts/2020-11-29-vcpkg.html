@@ -1,0 +1,40 @@
+---
+layout: post
+title: "vcpkg를 이용해 pcl(point cloud library) 설치하기"
+subtitle: "실수없이 한방에!"
+date: 2020-11-29 20:43:13 -0400
+background: ''
+---
+
+## vcpkg란설치하기
+<p>vcpkg는 마이크로소프트에서 제공하는 오픈소스 패키지 매니져입니다. 저같은 경우 윈도우 환경에서 작업할 때 개발환경을 구축하는게 정말 귀찮았었는데 이런 작업들을 편하게 해주는 툴입니다.[vcpkg github](https://github.com/microsoft/vcpkg) 링크를 타고 git clone을 통해 설치해줍시다.
+</p>
+
+```bash
+git clone https://github.com/microsoft/vcpkg
+```
+<p>git clone이 완료되면 vcpkg 폴더 안에 부트스트래퍼가 있습니다. 윈도우의 경우 ```bash ./bootstrap-vcpkg.bat```, 리눅스인 경우 ```bash ./bootstrap-vcpkg.sh```를 실행해주시면 됩니다.</p>
+
+## vcpkg 를 이용해 라이브러리 설치하기
+
+<p>```bash vcpkg search [pkg name]``` 을 통해 사용 가능한 라이브러리를 검색할 수 있습니다. 하지만 우리는 __pcl__을 설치하려고 하기 때문에 search 과정을 필요 없습니다. 하지만 pcl을 설치하기 전에 해주어야 할 일이 하나 있습니다. vcpkg 최신버전에서 __vtk__의 버전이 9.0인데 pcl에서 해당 버전 지원을 안합니다. 따라서 설치는 되지만 설치후 ```bash pcl/visualizer```가 없는것을 확인하실 수 있습니다. 따라서 우리는 __vtk__ 버전을낮춰줍시다. 
+
+```bash vcpkg/ports/vtk``` 폴더를 <https://github.com/microsoft/vcpkg/tree/c7cd6184d23686ffe54893a76bcd801b7940ba4b/ports/vtk> 의 vtk 폴더로 교체해줍시다. 까먹고 그냥 설치한다면 저처럼 몇시간동안 고생하실지도 모릅니다ㅠ. 교체후 pcl을 설치해 줍시다.
+</p>
+
+```bash
+./vcpkg install pcl:x64-windows
+```
+
+<p>
+설치하는데 쪼끔 오래걸릴 수 있습니다. 설치가 끝나면 ```bash vcpkg integrate install``` 을 실행합니다. 
+이러면 끝입니다. visual studio 에서 pcl 라이브러리가 제대로 설치되었는지 확인해봅시다!
+</p>
+
+## 실수로 vtk 버전을 바꾸지 않았다면?
+<p>
+저처럼 vtk 버전을 바꾸지 않고 설치를 했다가 __pcl visualizer__가 없는 것을 보고 헤맬시는 분들이 있을수도 있죠.
+pcl 패키지를 지우고 vtk 교체후  재설치를 했는데도 visualizer가 설치되지 않는다면 이는 __cache data__ 때문일 가능성이 큽니다.
+pcl 삭제후 재설치시 어떤 캐시데이터를 이용해 설치한다고 로그가 나옵니다.
+```bash AppData/Local/vcpkg/archives/CACHE_NAME``` 을 삭제 후 설치하시면 pcl visualizer가 제대로 설치된 것을 확인하실 수 있습니다.
+</p>
