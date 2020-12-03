@@ -1,0 +1,15 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+img
+{
+	display:block;
+	margin:auto;
+}
+figcaption
+{
+	text-align:center;
+	margin-bottom: 1px;
+	font-size: 17px;
+}
+@import "styles";
